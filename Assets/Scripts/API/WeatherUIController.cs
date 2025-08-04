@@ -47,27 +47,21 @@ namespace WeatherApp.UI
             getWeatherButton.interactable = false;
             SetStatusText("Loading weather data...");
             weatherDisplayText.text = "";
-            
-            try
+
+            var weatherData = await apiClient.GetWeatherDataAsync(cityName);
+
+            if (weatherData != null && weatherData.IsValid)
             {
-                // TODO: Call API client to get weather data
-              
-                
-                // TODO: Handle the response
+                DisplayWeatherData(weatherData);
+                SetStatusText("Weather data loaded successfully");
             }
-            catch (System.Exception ex)
+            else
             {
-                // Handle exceptions
-                Debug.LogError($"Error getting weather data: {ex.Message}");
-                SetStatusText("An error occurred. Please try again.");
+                SetStatusText("Failed to get weather data. Please try again.");
             }
-            finally
-            {
-                // Re-enable button
-                getWeatherButton.interactable = true;
-            }
+
         }
-        
+
         /// TODO: Students will implement this method
         private void DisplayWeatherData(WeatherData weatherData)
         {
@@ -80,14 +74,18 @@ namespace WeatherApp.UI
             // Pressure: 1013 hPa
 
             string displayText = "";
-            
+
             // TODO: Add more weather details
             if (weatherData.Main != null)
             {
-                displayText += "";
-                displayText += "";
+                displayText += $"City: {weatherData.CityName}\n";
+                displayText += $"Temperature: {weatherData.TemperatureInCelsius:F1}°C (Feels like: {weatherData.Main.FeelsLike:F1}°C)\n";
+                displayText += $"Description: {weatherData.PrimaryDescription}\n";
+                displayText += $"Humidity: {weatherData.Main.Humidity}%\n";
+                displayText += $"Pressure: {weatherData.Main.Pressure} hPa\n";
             }
-            
+
+
             weatherDisplayText.text = displayText;
         }
         
