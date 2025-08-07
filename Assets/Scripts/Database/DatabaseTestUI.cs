@@ -55,6 +55,7 @@ namespace Databases.UI
                 if (int.TryParse(scoreText, out int score))
                 {
                     // TODO: Use GameDataManager to add the high score
+                    GameDataManager.Instance.AddHighScore(playerName, score);
 
                     UpdateDisplay($"High score added: {playerName} - {score} points");
 
@@ -79,8 +80,7 @@ namespace Databases.UI
             try
             {
                 // TODO: Use GameDataManager to get high scores
-
-                var scores = new List<HighScore>(); // Placeholder - students will replace this
+                var scores = GameDataManager.Instance.GetTopHighScores();
 
                 if (scores.Count == 0)
                 {
@@ -88,13 +88,13 @@ namespace Databases.UI
                 }
                 else
                 {
-                    string displayText = "Top High Scores:\n";
+                    string display = "Top High Scores:\n";
                     for (int i = 0; i < scores.Count; i++)
                     {
                         var score = scores[i];
-                        displayText += $"{i + 1}. {score.PlayerName}: {score.Score} pts\n";
+                        display += $"{i + 1}. {score}\n";
                     }
-                    UpdateDisplay(displayText);
+                    UpdateDisplay(display);
                 }
             }
             catch (System.Exception ex)
@@ -109,6 +109,7 @@ namespace Databases.UI
             try
             {
                 // TODO: Use GameDataManager to clear all high scores
+                GameDataManager.Instance.ClearAllHighScores();
 
                 UpdateDisplay("All high scores cleared from database");
             }
